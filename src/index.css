@@ -2,95 +2,85 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
-
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
+    --background: 222 47% 6%;
     --foreground: 210 40% 98%;
 
-    --card: 222.2 84% 4.9%;
+    --card: 222 47% 8%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 222.2 84% 4.9%;
+    --popover: 222 47% 8%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 217 91% 60%;
+    --primary-foreground: 222 47% 6%;
 
-    --secondary: 217.2 32.6% 17.5%;
+    --secondary: 217 33% 17%;
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 217 33% 12%;
+    --muted-foreground: 215 20% 55%;
 
-    --accent: 217.2 32.6% 17.5%;
+    --accent: 217 33% 17%;
     --accent-foreground: 210 40% 98%;
 
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --border: 217 33% 17%;
+    --input: 217 33% 17%;
+    --ring: 217 91% 60%;
+
+    --radius: 0.75rem;
+
+    /* Domain Colors */
+    --academic: 217 91% 60%;
+    --academic-foreground: 222 47% 6%;
+    --academic-muted: 217 91% 60% / 0.15;
+
+    --health: 142 71% 45%;
+    --health-foreground: 222 47% 6%;
+    --health-muted: 142 71% 45% / 0.15;
+
+    --finance: 38 92% 50%;
+    --finance-foreground: 222 47% 6%;
+    --finance-muted: 38 92% 50% / 0.15;
+
+    --reflection: 270 70% 60%;
+    --reflection-foreground: 222 47% 6%;
+    --reflection-muted: 270 70% 60% / 0.15;
+
+    /* Status Colors */
+    --status-good: 142 71% 45%;
+    --status-warning: 38 92% 50%;
+    --status-bad: 0 84% 60%;
+
+    /* Gradients */
+    --gradient-academic: linear-gradient(135deg, hsl(217 91% 60%), hsl(230 91% 50%));
+    --gradient-health: linear-gradient(135deg, hsl(142 71% 45%), hsl(160 71% 40%));
+    --gradient-finance: linear-gradient(135deg, hsl(38 92% 50%), hsl(25 92% 45%));
+    --gradient-reflection: linear-gradient(135deg, hsl(270 70% 60%), hsl(290 70% 55%));
+
+    /* Shadows */
+    --shadow-sm: 0 2px 8px -2px hsl(222 47% 4% / 0.5);
+    --shadow-md: 0 4px 16px -4px hsl(222 47% 4% / 0.6);
+    --shadow-lg: 0 8px 32px -8px hsl(222 47% 4% / 0.7);
+    --shadow-glow-academic: 0 0 40px -10px hsl(217 91% 60% / 0.4);
+    --shadow-glow-health: 0 0 40px -10px hsl(142 71% 45% / 0.4);
+    --shadow-glow-finance: 0 0 40px -10px hsl(38 92% 50% / 0.4);
+    --shadow-glow-reflection: 0 0 40px -10px hsl(270 70% 60% / 0.4);
+
+    --sidebar-background: 222 47% 6%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 217 91% 60%;
+    --sidebar-primary-foreground: 222 47% 6%;
+    --sidebar-accent: 217 33% 17%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 217 33% 17%;
+    --sidebar-ring: 217 91% 60%;
   }
 }
 
@@ -100,6 +90,135 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight;
+  }
+
+  code, pre {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+@layer components {
+  .domain-card {
+    @apply relative overflow-hidden rounded-xl border border-border bg-card p-6 transition-all duration-300;
+  }
+
+  .domain-card:hover {
+    @apply border-muted-foreground/30;
+    transform: translateY(-2px);
+  }
+
+  .domain-card-academic {
+    @apply domain-card;
+    box-shadow: var(--shadow-md), var(--shadow-glow-academic);
+  }
+
+  .domain-card-health {
+    @apply domain-card;
+    box-shadow: var(--shadow-md), var(--shadow-glow-health);
+  }
+
+  .domain-card-finance {
+    @apply domain-card;
+    box-shadow: var(--shadow-md), var(--shadow-glow-finance);
+  }
+
+  .domain-card-reflection {
+    @apply domain-card;
+    box-shadow: var(--shadow-md), var(--shadow-glow-reflection);
+  }
+
+  .status-badge {
+    @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium;
+  }
+
+  .status-good {
+    @apply status-badge;
+    background: hsl(var(--status-good) / 0.15);
+    color: hsl(var(--status-good));
+  }
+
+  .status-warning {
+    @apply status-badge;
+    background: hsl(var(--status-warning) / 0.15);
+    color: hsl(var(--status-warning));
+  }
+
+  .status-bad {
+    @apply status-badge;
+    background: hsl(var(--status-bad) / 0.15);
+    color: hsl(var(--status-bad));
+  }
+
+  .glass-panel {
+    @apply rounded-xl border border-border/50 bg-card/80 backdrop-blur-xl;
+  }
+
+  .text-gradient-academic {
+    background: var(--gradient-academic);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-health {
+    background: var(--gradient-health);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-finance {
+    background: var(--gradient-finance);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-reflection {
+    background: var(--gradient-reflection);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.5s ease-out forwards;
+  }
+
+  .animate-pulse-slow {
+    animation: pulse 3s ease-in-out infinite;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slideUp {
+    from { 
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to { 
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
   }
 }
