@@ -4,6 +4,10 @@ import { PageHeader } from "@/components/ui/page-header";
 import { DomainCard } from "@/components/dashboard/DomainCard";
 import { QuickStats } from "@/components/dashboard/QuickStats";
 import { MiniCalendar } from "@/components/calendar/MiniCalendar";
+import { WeeklyActivityChart } from "@/components/dashboard/WeeklyActivityChart";
+import { DomainProgressChart } from "@/components/dashboard/DomainProgressChart";
+import { StreakChart } from "@/components/dashboard/StreakChart";
+import { StudyHoursChart } from "@/components/dashboard/StudyHoursChart";
 
 // Mock data for demonstration
 const mockActivities = [
@@ -35,6 +39,14 @@ export default function Dashboard() {
         {/* Quick Stats */}
         <div className="mb-8">
           <QuickStats stats={stats} />
+        </div>
+
+        {/* Charts Row */}
+        <div className="mb-8 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          <WeeklyActivityChart />
+          <DomainProgressChart />
+          <StreakChart />
+          <StudyHoursChart />
         </div>
 
         <div className="grid gap-8 lg:grid-cols-3">
