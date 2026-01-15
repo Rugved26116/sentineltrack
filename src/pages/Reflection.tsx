@@ -1,51 +1,19 @@
 import { useState } from "react";
-import { Plus, BookOpen, Calendar, Sparkles } from "lucide-react";
-import { format, subDays } from "date-fns";
+import { Plus, BookOpen, Calendar, Sparkles, Trash2 } from "lucide-react";
+import { format, parseISO } from "date-fns";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { PageHeader } from "@/components/ui/page-header";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-
-interface Reflection {
-  id: string;
-  date: Date;
-  content: string;
-  mood?: "great" | "good" | "neutral" | "bad";
-}
-
-const mockReflections: Reflection[] = [
-  {
-    id: "1",
-    date: new Date(),
-    content: "Productive day. Completed all planned study tasks and had a good workout. Need to focus on drinking more water.",
-    mood: "great",
-  },
-  {
-    id: "2",
-    date: subDays(new Date(), 1),
-    content: "Struggled with motivation in the morning but picked up momentum after lunch. The physics concepts are finally clicking.",
-    mood: "good",
-  },
-  {
-    id: "3",
-    date: subDays(new Date(), 2),
-    content: "Rest day. Spent time organizing notes and planning for the week ahead. Feeling prepared for the upcoming tests.",
-    mood: "neutral",
-  },
-  {
-    id: "4",
-    date: subDays(new Date(), 3),
-    content: "Challenging day. Multiple deadlines converged but managed to prioritize effectively. Sleep quality was poor.",
-    mood: "bad",
-  },
-];
+import { useReflections } from "@/hooks/useReflections";
 
 const moodEmojis = {
   great: "🌟",
   good: "😊",
   neutral: "😐",
   bad: "😔",
+  terrible: "😢",
 };
 
 const moodColors = {
@@ -53,16 +21,58 @@ const moodColors = {
   good: "bg-academic text-academic-foreground",
   neutral: "bg-secondary text-secondary-foreground",
   bad: "bg-destructive/20 text-destructive",
+  terrible: "bg-destructive/30 text-destructive",
 };
 
 export default function ReflectionPage() {
-  const [reflections] = useState(mockReflections);
-  const [selectedReflection, setSelectedReflection] = useState<Reflection | null>(null);
+  const { reflections, isLoading, addReflection, deleteReflection } = useReflections();
+  const [selectedReflection, setSelectedReflection] = useState<string | null>(null);
   const [isWriting, setIsWriting] = useState(false);
   const [newReflection, setNewReflection] = useState("");
+  const [selectedMood, setSelectedMood] = useState<keyof typeof moodEmojis | null>(null);
 
-  const currentStreak = 5; // Mock streak
+  const handleSave = () => {
+    if (!newReflection.trim()) return;
+    addReflection.mutate({
+      content: newReflection,
+      mood: selectedMood,
+      reflection_date: format(new Date(), "yyyy-MM-dd"),
+    });
+    setNewReflection("");
+    setSelectedMood(null);
+    setIsWriting(false);
+  };
+
+  // Calculate streak
+  const calculateStreak = () => {
+    if (reflections.length === 0) return 0;
+    let streak = 0;
+    const today = new Date();
+    for (let i = 0; i < reflections.length; i++) {
+      const refDate = parseISO(reflections[i].reflection_date);
+      const expectedDate = new Date(today);
+      expectedDate.setDate(expectedDate.getDate() - i);
+      if (format(refDate, "yyyy-MM-dd") === format(expectedDate, "yyyy-MM-dd")) {
+        streak++;
+      } else {
+        break;
+      }
+    }
+    return streak;
+  };
+
+  const currentStreak = calculateStreak();
   const totalReflections = reflections.length;
+
+  if (isLoading) {
+    return (
+      <MainLayout>
+        <div className="flex h-64 items-center justify-center">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-reflection border-t-transparent" />
+        </div>
+      </MainLayout>
+    );
+  }
 
   return (
     <MainLayout>
@@ -111,8 +121,10 @@ export default function ReflectionPage() {
                 <Calendar className="h-5 w-5 text-reflection" />
               </div>
               <div>
-                <p className="text-2xl font-bold">28</p>
-                <p className="text-sm text-muted-foreground">This month</p>
+                <p className="text-2xl font-bold">
+                  {reflections.length > 0 ? "Active" : "Start"}
+                </p>
+                <p className="text-sm text-muted-foreground">Status</p>
               </div>
             </div>
           </div>
@@ -132,12 +144,15 @@ export default function ReflectionPage() {
             />
             <div className="flex items-center justify-between">
               <div className="flex gap-2">
-                {Object.entries(moodEmojis).map(([mood, emoji]) => (
+                {(Object.entries(moodEmojis) as [keyof typeof moodEmojis, string][]).map(([mood, emoji]) => (
                   <button
                     key={mood}
+                    onClick={() => setSelectedMood(mood)}
                     className={cn(
                       "rounded-lg px-3 py-2 text-lg transition-all hover:scale-110",
-                      "bg-secondary hover:bg-secondary/80"
+                      selectedMood === mood
+                        ? "bg-reflection text-reflection-foreground"
+                        : "bg-secondary hover:bg-secondary/80"
                     )}
                   >
                     {emoji}
@@ -145,10 +160,18 @@ export default function ReflectionPage() {
                 ))}
               </div>
               <div className="flex gap-2">
-                <Button variant="ghost" onClick={() => setIsWriting(false)}>
+                <Button variant="ghost" onClick={() => {
+                  setIsWriting(false);
+                  setNewReflection("");
+                  setSelectedMood(null);
+                }}>
                   Cancel
                 </Button>
-                <Button className="bg-reflection text-reflection-foreground hover:bg-reflection/90">
+                <Button 
+                  onClick={handleSave}
+                  className="bg-reflection text-reflection-foreground hover:bg-reflection/90"
+                  disabled={!newReflection.trim()}
+                >
                   Save
                 </Button>
               </div>
@@ -159,47 +182,74 @@ export default function ReflectionPage() {
         {/* Reflections List */}
         <div className="space-y-4">
           <h3 className="text-lg font-semibold">Past Reflections</h3>
-          {reflections.map((reflection, index) => (
-            <div
-              key={reflection.id}
-              className="group cursor-pointer rounded-xl border border-border bg-card p-5 transition-all animate-slide-up hover:border-reflection/30"
-              style={{ animationDelay: `${index * 50}ms` }}
-              onClick={() =>
-                setSelectedReflection(
-                  selectedReflection?.id === reflection.id ? null : reflection
-                )
-              }
-            >
-              <div className="mb-3 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <span
-                    className={cn(
-                      "rounded-full px-2 py-1 text-sm",
-                      reflection.mood && moodColors[reflection.mood]
-                    )}
-                  >
-                    {reflection.mood && moodEmojis[reflection.mood]}
-                  </span>
-                  <span className="font-medium">
-                    {format(reflection.date, "EEEE, MMMM d")}
-                  </span>
-                </div>
-                <span className="text-sm text-muted-foreground">
-                  {format(reflection.date, "yyyy")}
-                </span>
+          {reflections.length === 0 ? (
+            <div className="glass-panel flex flex-col items-center justify-center p-12 text-center">
+              <div className="mb-4 rounded-full bg-reflection-muted p-4">
+                <BookOpen className="h-8 w-8 text-reflection" />
               </div>
-              <p
-                className={cn(
-                  "text-muted-foreground transition-all",
-                  selectedReflection?.id === reflection.id
-                    ? ""
-                    : "line-clamp-2"
-                )}
-              >
-                {reflection.content}
+              <h3 className="mb-2 font-semibold">No reflections yet</h3>
+              <p className="text-sm text-muted-foreground">
+                Write your first reflection to start your journey
               </p>
             </div>
-          ))}
+          ) : (
+            reflections.map((reflection, index) => (
+              <div
+                key={reflection.id}
+                className="group cursor-pointer rounded-xl border border-border bg-card p-5 transition-all animate-slide-up hover:border-reflection/30"
+                style={{ animationDelay: `${index * 50}ms` }}
+                onClick={() =>
+                  setSelectedReflection(
+                    selectedReflection === reflection.id ? null : reflection.id
+                  )
+                }
+              >
+                <div className="mb-3 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    {reflection.mood && (
+                      <span
+                        className={cn(
+                          "rounded-full px-2 py-1 text-sm",
+                          moodColors[reflection.mood]
+                        )}
+                      >
+                        {moodEmojis[reflection.mood]}
+                      </span>
+                    )}
+                    <span className="font-medium">
+                      {format(parseISO(reflection.reflection_date), "EEEE, MMMM d")}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-muted-foreground">
+                      {format(parseISO(reflection.reflection_date), "yyyy")}
+                    </span>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-6 w-6 opacity-0 transition-opacity group-hover:opacity-100 text-destructive hover:text-destructive hover:bg-destructive/10"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        deleteReflection.mutate(reflection.id);
+                      }}
+                    >
+                      <Trash2 className="h-3 w-3" />
+                    </Button>
+                  </div>
+                </div>
+                <p
+                  className={cn(
+                    "text-muted-foreground transition-all",
+                    selectedReflection === reflection.id
+                      ? ""
+                      : "line-clamp-2"
+                  )}
+                >
+                  {reflection.content}
+                </p>
+              </div>
+            ))
+          )}
         </div>
       </div>
     </MainLayout>
