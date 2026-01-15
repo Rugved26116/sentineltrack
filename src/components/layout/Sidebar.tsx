@@ -8,8 +8,11 @@ import {
   BookOpen,
   Download,
   Settings,
+  LogOut,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/hooks/useAuth";
+import { Button } from "@/components/ui/button";
 
 const navigation = [
   { name: "Dashboard", href: "/", icon: LayoutDashboard },
@@ -27,6 +30,7 @@ const secondaryNav = [
 
 export function Sidebar() {
   const location = useLocation();
+  const { user, signOut } = useAuth();
 
   return (
     <aside className="fixed left-0 top-0 z-40 h-screen w-64 border-r border-border bg-card/50 backdrop-blur-xl">
@@ -121,6 +125,17 @@ export function Sidebar() {
               {item.name}
             </NavLink>
           ))}
+          
+          {user && (
+            <Button
+              variant="ghost"
+              onClick={signOut}
+              className="mt-2 w-full justify-start gap-3 px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-secondary/50 hover:text-foreground"
+            >
+              <LogOut className="h-5 w-5" />
+              Sign Out
+            </Button>
+          )}
         </div>
       </div>
     </aside>
