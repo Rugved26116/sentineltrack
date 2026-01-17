@@ -28,11 +28,16 @@ export default function AcademicPage() {
   const { tasks, isLoading, addTask, updateTask, deleteTask } = useAcademicTasks();
   const [filter, setFilter] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [newTask, setNewTask] = useState({
+  const [newTask, setNewTask] = useState<{
+    subject: string;
+    title: string;
+    description: string;
+    priority: "low" | "medium" | "high";
+  }>({
     subject: "",
     title: "",
     description: "",
-    priority: "medium" as const,
+    priority: "medium",
   });
 
   const toggleTask = (id: string, currentStatus: string) => {
