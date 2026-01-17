@@ -2,6 +2,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
+import { getSafeErrorMessage } from '@/lib/errorHandler';
+import { workoutSchema } from '@/lib/validationSchemas';
 
 export interface WorkoutExercise {
   id: string;
@@ -56,11 +58,19 @@ export function useWorkouts() {
       notes?: string;
       exercises?: Omit<WorkoutExercise, 'id' | 'workout_id' | 'created_at'>[];
     }) => {
-      const { exercises, ...workoutData } = workout;
+      // Validate input before sending to database
+      const validatedWorkout = workoutSchema.parse(workout);
+      const { exercises, ...workoutData } = validatedWorkout;
       
       const { data: newWorkout, error: workoutError } = await supabase
         .from('workouts')
-        .insert({ ...workoutData, user_id: user!.id })
+        .insert({
+          name: workoutData.name,
+          workout_date: workoutData.workout_date,
+          duration_minutes: workoutData.duration_minutes || null,
+          notes: workoutData.notes || null,
+          user_id: user!.id
+        })
         .select()
         .single();
       
@@ -69,7 +79,15 @@ export function useWorkouts() {
       if (exercises && exercises.length > 0) {
         const { error: exercisesError } = await supabase
           .from('workout_exercises')
-          .insert(exercises.map(ex => ({ ...ex, workout_id: newWorkout.id })));
+          .insert(exercises.map(ex => ({
+            exercise_name: ex.exercise_name,
+            sets: ex.sets || null,
+            reps: ex.reps || null,
+            weight: ex.weight || null,
+            notes: ex.notes || null,
+            order_index: ex.order_index || 0,
+            workout_id: newWorkout.id
+          })));
         
         if (exercisesError) throw exercisesError;
       }
@@ -80,8 +98,8 @@ export function useWorkouts() {
       queryClient.invalidateQueries({ queryKey: ['workouts'] });
       toast.success('Workout logged!');
     },
-    onError: (error: Error) => {
-      toast.error(error.message);
+    onError: (error: unknown) => {
+      toast.error(getSafeErrorMessage(error, 'add'));
     },
   });
 
@@ -98,8 +116,8 @@ export function useWorkouts() {
       queryClient.invalidateQueries({ queryKey: ['workouts'] });
       toast.success('Workout deleted!');
     },
-    onError: (error: Error) => {
-      toast.error(error.message);
+    onError: (error: unknown) => {
+      toast.error(getSafeErrorMessage(error, 'delete'));
     },
   });
 

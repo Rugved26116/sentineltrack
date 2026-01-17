@@ -2,6 +2,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
+import { getSafeErrorMessage } from '@/lib/errorHandler';
+import { reflectionSchema, reflectionUpdateSchema } from '@/lib/validationSchemas';
 
 export interface Reflection {
   id: string;
@@ -33,9 +35,17 @@ export function useReflections() {
 
   const addReflection = useMutation({
     mutationFn: async (reflection: Omit<Reflection, 'id' | 'user_id' | 'created_at' | 'updated_at'>) => {
+      // Validate input before sending to database
+      const validatedReflection = reflectionSchema.parse(reflection);
+      
       const { data, error } = await supabase
         .from('reflections')
-        .insert({ ...reflection, user_id: user!.id })
+        .insert({
+          content: validatedReflection.content,
+          mood: validatedReflection.mood || null,
+          reflection_date: validatedReflection.reflection_date,
+          user_id: user!.id
+        })
         .select()
         .single();
       
@@ -46,16 +56,19 @@ export function useReflections() {
       queryClient.invalidateQueries({ queryKey: ['reflections'] });
       toast.success('Reflection saved!');
     },
-    onError: (error: Error) => {
-      toast.error(error.message);
+    onError: (error: unknown) => {
+      toast.error(getSafeErrorMessage(error, 'add'));
     },
   });
 
   const updateReflection = useMutation({
     mutationFn: async ({ id, ...updates }: Partial<Reflection> & { id: string }) => {
+      // Validate update input
+      const validatedUpdates = reflectionUpdateSchema.parse(updates);
+      
       const { data, error } = await supabase
         .from('reflections')
-        .update(updates)
+        .update(validatedUpdates)
         .eq('id', id)
         .select()
         .single();
@@ -67,8 +80,8 @@ export function useReflections() {
       queryClient.invalidateQueries({ queryKey: ['reflections'] });
       toast.success('Reflection updated!');
     },
-    onError: (error: Error) => {
-      toast.error(error.message);
+    onError: (error: unknown) => {
+      toast.error(getSafeErrorMessage(error, 'update'));
     },
   });
 
@@ -85,8 +98,8 @@ export function useReflections() {
       queryClient.invalidateQueries({ queryKey: ['reflections'] });
       toast.success('Reflection deleted!');
     },
-    onError: (error: Error) => {
-      toast.error(error.message);
+    onError: (error: unknown) => {
+      toast.error(getSafeErrorMessage(error, 'delete'));
     },
   });
 

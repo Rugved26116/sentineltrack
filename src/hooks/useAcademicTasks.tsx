@@ -2,6 +2,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
+import { getSafeErrorMessage } from '@/lib/errorHandler';
+import { academicTaskSchema, academicTaskUpdateSchema } from '@/lib/validationSchemas';
 
 export interface AcademicTask {
   id: string;
@@ -37,9 +39,20 @@ export function useAcademicTasks() {
 
   const addTask = useMutation({
     mutationFn: async (task: Omit<AcademicTask, 'id' | 'user_id' | 'created_at' | 'updated_at' | 'completed_at'>) => {
+      // Validate input before sending to database
+      const validatedTask = academicTaskSchema.parse(task);
+      
       const { data, error } = await supabase
         .from('academic_tasks')
-        .insert({ ...task, user_id: user!.id })
+        .insert({ 
+          subject: validatedTask.subject,
+          title: validatedTask.title,
+          description: validatedTask.description || null,
+          status: validatedTask.status,
+          priority: validatedTask.priority,
+          due_date: validatedTask.due_date || null,
+          user_id: user!.id 
+        })
         .select()
         .single();
       
@@ -50,16 +63,19 @@ export function useAcademicTasks() {
       queryClient.invalidateQueries({ queryKey: ['academic_tasks'] });
       toast.success('Task added!');
     },
-    onError: (error: Error) => {
-      toast.error(error.message);
+    onError: (error: unknown) => {
+      toast.error(getSafeErrorMessage(error, 'add'));
     },
   });
 
   const updateTask = useMutation({
     mutationFn: async ({ id, ...updates }: Partial<AcademicTask> & { id: string }) => {
+      // Validate update input
+      const validatedUpdates = academicTaskUpdateSchema.parse(updates);
+      
       const { data, error } = await supabase
         .from('academic_tasks')
-        .update(updates)
+        .update(validatedUpdates)
         .eq('id', id)
         .select()
         .single();
@@ -71,8 +87,8 @@ export function useAcademicTasks() {
       queryClient.invalidateQueries({ queryKey: ['academic_tasks'] });
       toast.success('Task updated!');
     },
-    onError: (error: Error) => {
-      toast.error(error.message);
+    onError: (error: unknown) => {
+      toast.error(getSafeErrorMessage(error, 'update'));
     },
   });
 
@@ -89,8 +105,8 @@ export function useAcademicTasks() {
       queryClient.invalidateQueries({ queryKey: ['academic_tasks'] });
       toast.success('Task deleted!');
     },
-    onError: (error: Error) => {
-      toast.error(error.message);
+    onError: (error: unknown) => {
+      toast.error(getSafeErrorMessage(error, 'delete'));
     },
   });
 
