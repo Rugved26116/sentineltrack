@@ -6,6 +6,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Activity, Mail, Lock, ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
+import { getSafeErrorMessage } from '@/lib/errorHandler';
+import { authSchema } from '@/lib/validationSchemas';
 
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(true);
@@ -20,19 +22,22 @@ export default function Auth() {
     setLoading(true);
 
     try {
+      // Validate input before sending to auth
+      const validatedInput = authSchema.parse({ email, password });
+      
       if (isLogin) {
-        const { error } = await signIn(email, password);
+        const { error } = await signIn(validatedInput.email, validatedInput.password);
         if (error) throw error;
         toast.success('Welcome back!');
         navigate('/');
       } else {
-        const { error } = await signUp(email, password);
+        const { error } = await signUp(validatedInput.email, validatedInput.password);
         if (error) throw error;
         toast.success('Account created! You can now sign in.');
         navigate('/');
       }
-    } catch (error: any) {
-      toast.error(error.message);
+    } catch (error: unknown) {
+      toast.error(getSafeErrorMessage(error, 'auth'));
     } finally {
       setLoading(false);
     }
@@ -66,6 +71,7 @@ export default function Auth() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="pl-10"
+                  maxLength={255}
                   required
                 />
               </div>
@@ -83,6 +89,7 @@ export default function Auth() {
                   onChange={(e) => setPassword(e.target.value)}
                   className="pl-10"
                   minLength={6}
+                  maxLength={72}
                   required
                 />
               </div>

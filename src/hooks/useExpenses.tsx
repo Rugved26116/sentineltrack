@@ -2,6 +2,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
 import { toast } from 'sonner';
+import { getSafeErrorMessage } from '@/lib/errorHandler';
+import { expenseSchema } from '@/lib/validationSchemas';
 
 export interface Expense {
   id: string;
@@ -34,9 +36,18 @@ export function useExpenses() {
 
   const addExpense = useMutation({
     mutationFn: async (expense: Omit<Expense, 'id' | 'user_id' | 'created_at' | 'updated_at'>) => {
+      // Validate input before sending to database
+      const validatedExpense = expenseSchema.parse(expense);
+      
       const { data, error } = await supabase
         .from('expenses')
-        .insert({ ...expense, user_id: user!.id })
+        .insert({
+          amount: validatedExpense.amount,
+          category: validatedExpense.category,
+          description: validatedExpense.description || null,
+          expense_date: validatedExpense.expense_date,
+          user_id: user!.id
+        })
         .select()
         .single();
       
@@ -47,8 +58,8 @@ export function useExpenses() {
       queryClient.invalidateQueries({ queryKey: ['expenses'] });
       toast.success('Expense added!');
     },
-    onError: (error: Error) => {
-      toast.error(error.message);
+    onError: (error: unknown) => {
+      toast.error(getSafeErrorMessage(error, 'add'));
     },
   });
 
@@ -65,8 +76,8 @@ export function useExpenses() {
       queryClient.invalidateQueries({ queryKey: ['expenses'] });
       toast.success('Expense deleted!');
     },
-    onError: (error: Error) => {
-      toast.error(error.message);
+    onError: (error: unknown) => {
+      toast.error(getSafeErrorMessage(error, 'delete'));
     },
   });
 
