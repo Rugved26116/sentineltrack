@@ -6,90 +6,90 @@
 
 @layer base {
   :root {
-    /* Background / Sidebar: Charcoal navy #0F172A */
-    --background: 222 47% 11%;
-    /* Primary Text: Dark slate #1E293B */
-    --foreground: 215 28% 17%;
+    /* Deep charcoal base for contrast */
+    --background: 240 10% 4%;
+    --foreground: 0 0% 98%;
 
-    /* Cards / Panels: Soft off-white #F8FAFC */
-    --card: 210 40% 98%;
-    --card-foreground: 215 28% 17%;
+    /* Dark elevated cards */
+    --card: 240 10% 8%;
+    --card-foreground: 0 0% 98%;
 
-    --popover: 210 40% 98%;
-    --popover-foreground: 215 28% 17%;
+    --popover: 240 10% 8%;
+    --popover-foreground: 0 0% 98%;
 
-    /* Accent (buttons, active items): Deep blue #2563EB */
-    --primary: 217 91% 53%;
-    --primary-foreground: 210 40% 98%;
+    /* Electric violet primary */
+    --primary: 262 83% 58%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 215 28% 17%;
+    --secondary: 240 6% 15%;
+    --secondary-foreground: 0 0% 98%;
 
-    /* Secondary Text: Muted grey #64748B */
-    --muted: 210 40% 96%;
-    --muted-foreground: 215 16% 47%;
+    --muted: 240 6% 15%;
+    --muted-foreground: 240 5% 65%;
 
-    --accent: 210 40% 96%;
-    --accent-foreground: 215 28% 17%;
+    --accent: 240 6% 15%;
+    --accent-foreground: 0 0% 98%;
 
-    /* Error: #DC2626 */
-    --destructive: 0 84% 50%;
-    --destructive-foreground: 210 40% 98%;
+    /* Hot coral destructive */
+    --destructive: 0 91% 61%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 217 91% 53%;
+    --border: 240 6% 18%;
+    --input: 240 6% 18%;
+    --ring: 262 83% 58%;
 
     --radius: 0.75rem;
 
-    /* Domain Colors - using the accent blue */
-    --academic: 217 91% 53%;
-    --academic-foreground: 210 40% 98%;
-    --academic-muted: 217 91% 53% / 0.15;
+    /* Domain Colors - punchy and distinct */
+    /* Electric blue for academic */
+    --academic: 217 100% 60%;
+    --academic-foreground: 0 0% 100%;
+    --academic-muted: 217 100% 60% / 0.2;
 
-    /* Status: Good #16A34A */
-    --health: 142 76% 36%;
-    --health-foreground: 210 40% 98%;
-    --health-muted: 142 76% 36% / 0.15;
+    /* Vibrant emerald for health */
+    --health: 160 84% 45%;
+    --health-foreground: 0 0% 100%;
+    --health-muted: 160 84% 45% / 0.2;
 
-    /* Status: Warning #D97706 */
-    --finance: 32 95% 44%;
-    --finance-foreground: 210 40% 98%;
-    --finance-muted: 32 95% 44% / 0.15;
+    /* Hot orange for finance */
+    --finance: 24 95% 55%;
+    --finance-foreground: 0 0% 100%;
+    --finance-muted: 24 95% 55% / 0.2;
 
-    --reflection: 270 70% 60%;
-    --reflection-foreground: 210 40% 98%;
-    --reflection-muted: 270 70% 60% / 0.15;
+    /* Electric violet for reflection */
+    --reflection: 262 83% 58%;
+    --reflection-foreground: 0 0% 100%;
+    --reflection-muted: 262 83% 58% / 0.2;
 
-    /* Status Colors */
-    --status-good: 142 76% 36%;
-    --status-warning: 32 95% 44%;
-    --status-bad: 0 84% 50%;
+    /* Status Colors - bold and clear */
+    --status-good: 160 84% 45%;
+    --status-warning: 38 100% 50%;
+    --status-bad: 0 91% 61%;
 
-    /* Gradients */
-    --gradient-academic: linear-gradient(135deg, hsl(217 91% 53%), hsl(230 91% 45%));
-    --gradient-health: linear-gradient(135deg, hsl(142 76% 36%), hsl(160 71% 32%));
-    --gradient-finance: linear-gradient(135deg, hsl(32 95% 44%), hsl(25 92% 40%));
-    --gradient-reflection: linear-gradient(135deg, hsl(270 70% 60%), hsl(290 70% 55%));
+    /* Vibrant Gradients */
+    --gradient-academic: linear-gradient(135deg, hsl(217 100% 60%), hsl(200 100% 50%));
+    --gradient-health: linear-gradient(135deg, hsl(160 84% 45%), hsl(140 80% 40%));
+    --gradient-finance: linear-gradient(135deg, hsl(24 95% 55%), hsl(40 100% 50%));
+    --gradient-reflection: linear-gradient(135deg, hsl(262 83% 58%), hsl(290 80% 55%));
 
-    /* Shadows */
-    --shadow-sm: 0 2px 8px -2px hsl(222 47% 11% / 0.1);
-    --shadow-md: 0 4px 16px -4px hsl(222 47% 11% / 0.15);
-    --shadow-lg: 0 8px 32px -8px hsl(222 47% 11% / 0.2);
-    --shadow-glow-academic: 0 0 40px -10px hsl(217 91% 53% / 0.3);
-    --shadow-glow-health: 0 0 40px -10px hsl(142 76% 36% / 0.3);
-    --shadow-glow-finance: 0 0 40px -10px hsl(32 95% 44% / 0.3);
-    --shadow-glow-reflection: 0 0 40px -10px hsl(270 70% 60% / 0.3);
+    /* Dramatic Shadows with color glow */
+    --shadow-sm: 0 2px 8px -2px hsl(0 0% 0% / 0.5);
+    --shadow-md: 0 4px 20px -4px hsl(0 0% 0% / 0.6);
+    --shadow-lg: 0 8px 40px -8px hsl(0 0% 0% / 0.7);
+    --shadow-glow-academic: 0 0 50px -10px hsl(217 100% 60% / 0.5);
+    --shadow-glow-health: 0 0 50px -10px hsl(160 84% 45% / 0.5);
+    --shadow-glow-finance: 0 0 50px -10px hsl(24 95% 55% / 0.5);
+    --shadow-glow-reflection: 0 0 50px -10px hsl(262 83% 58% / 0.5);
 
-    /* Sidebar: Charcoal navy #0F172A */
-    --sidebar-background: 222 47% 11%;
-    --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 217 91% 53%;
-    --sidebar-primary-foreground: 210 40% 98%;
-    --sidebar-accent: 222 47% 18%;
-    --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 222 47% 20%;
-    --sidebar-ring: 217 91% 53%;
+    /* Sidebar - slightly elevated from background */
+    --sidebar-background: 240 10% 6%;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 262 83% 58%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 6% 15%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 240 6% 18%;
+    --sidebar-ring: 262 83% 58%;
   }
 }
 
