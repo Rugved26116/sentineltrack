@@ -38,9 +38,9 @@ export function Sidebar() {
         {/* Logo */}
         <div className="flex h-16 items-center gap-3 border-b border-border px-6">
           <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
-            <span className="text-lg font-bold text-primary-foreground">L</span>
+            <span className="text-lg font-bold text-primary-foreground">S</span>
           </div>
-          <span className="text-lg font-semibold tracking-tight">LifeTrack</span>
+          <span className="text-lg font-semibold tracking-tight">Sentinel</span>
         </div>
 
         {/* Main Navigation */}

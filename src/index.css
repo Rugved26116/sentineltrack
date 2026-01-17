@@ -6,81 +6,90 @@
 
 @layer base {
   :root {
-    --background: 222 47% 6%;
-    --foreground: 210 40% 98%;
+    /* Background / Sidebar: Charcoal navy #0F172A */
+    --background: 222 47% 11%;
+    /* Primary Text: Dark slate #1E293B */
+    --foreground: 215 28% 17%;
 
-    --card: 222 47% 8%;
-    --card-foreground: 210 40% 98%;
+    /* Cards / Panels: Soft off-white #F8FAFC */
+    --card: 210 40% 98%;
+    --card-foreground: 215 28% 17%;
 
-    --popover: 222 47% 8%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 210 40% 98%;
+    --popover-foreground: 215 28% 17%;
 
-    --primary: 217 91% 60%;
-    --primary-foreground: 222 47% 6%;
+    /* Accent (buttons, active items): Deep blue #2563EB */
+    --primary: 217 91% 53%;
+    --primary-foreground: 210 40% 98%;
 
-    --secondary: 217 33% 17%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 215 28% 17%;
 
-    --muted: 217 33% 12%;
-    --muted-foreground: 215 20% 55%;
+    /* Secondary Text: Muted grey #64748B */
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
 
-    --accent: 217 33% 17%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 210 40% 96%;
+    --accent-foreground: 215 28% 17%;
 
-    --destructive: 0 84% 60%;
+    /* Error: #DC2626 */
+    --destructive: 0 84% 50%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217 33% 17%;
-    --input: 217 33% 17%;
-    --ring: 217 91% 60%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 217 91% 53%;
 
     --radius: 0.75rem;
 
-    /* Domain Colors */
-    --academic: 217 91% 60%;
-    --academic-foreground: 222 47% 6%;
-    --academic-muted: 217 91% 60% / 0.15;
+    /* Domain Colors - using the accent blue */
+    --academic: 217 91% 53%;
+    --academic-foreground: 210 40% 98%;
+    --academic-muted: 217 91% 53% / 0.15;
 
-    --health: 142 71% 45%;
-    --health-foreground: 222 47% 6%;
-    --health-muted: 142 71% 45% / 0.15;
+    /* Status: Good #16A34A */
+    --health: 142 76% 36%;
+    --health-foreground: 210 40% 98%;
+    --health-muted: 142 76% 36% / 0.15;
 
-    --finance: 38 92% 50%;
-    --finance-foreground: 222 47% 6%;
-    --finance-muted: 38 92% 50% / 0.15;
+    /* Status: Warning #D97706 */
+    --finance: 32 95% 44%;
+    --finance-foreground: 210 40% 98%;
+    --finance-muted: 32 95% 44% / 0.15;
 
     --reflection: 270 70% 60%;
-    --reflection-foreground: 222 47% 6%;
+    --reflection-foreground: 210 40% 98%;
     --reflection-muted: 270 70% 60% / 0.15;
 
     /* Status Colors */
-    --status-good: 142 71% 45%;
-    --status-warning: 38 92% 50%;
-    --status-bad: 0 84% 60%;
+    --status-good: 142 76% 36%;
+    --status-warning: 32 95% 44%;
+    --status-bad: 0 84% 50%;
 
     /* Gradients */
-    --gradient-academic: linear-gradient(135deg, hsl(217 91% 60%), hsl(230 91% 50%));
-    --gradient-health: linear-gradient(135deg, hsl(142 71% 45%), hsl(160 71% 40%));
-    --gradient-finance: linear-gradient(135deg, hsl(38 92% 50%), hsl(25 92% 45%));
+    --gradient-academic: linear-gradient(135deg, hsl(217 91% 53%), hsl(230 91% 45%));
+    --gradient-health: linear-gradient(135deg, hsl(142 76% 36%), hsl(160 71% 32%));
+    --gradient-finance: linear-gradient(135deg, hsl(32 95% 44%), hsl(25 92% 40%));
     --gradient-reflection: linear-gradient(135deg, hsl(270 70% 60%), hsl(290 70% 55%));
 
     /* Shadows */
-    --shadow-sm: 0 2px 8px -2px hsl(222 47% 4% / 0.5);
-    --shadow-md: 0 4px 16px -4px hsl(222 47% 4% / 0.6);
-    --shadow-lg: 0 8px 32px -8px hsl(222 47% 4% / 0.7);
-    --shadow-glow-academic: 0 0 40px -10px hsl(217 91% 60% / 0.4);
-    --shadow-glow-health: 0 0 40px -10px hsl(142 71% 45% / 0.4);
-    --shadow-glow-finance: 0 0 40px -10px hsl(38 92% 50% / 0.4);
-    --shadow-glow-reflection: 0 0 40px -10px hsl(270 70% 60% / 0.4);
+    --shadow-sm: 0 2px 8px -2px hsl(222 47% 11% / 0.1);
+    --shadow-md: 0 4px 16px -4px hsl(222 47% 11% / 0.15);
+    --shadow-lg: 0 8px 32px -8px hsl(222 47% 11% / 0.2);
+    --shadow-glow-academic: 0 0 40px -10px hsl(217 91% 53% / 0.3);
+    --shadow-glow-health: 0 0 40px -10px hsl(142 76% 36% / 0.3);
+    --shadow-glow-finance: 0 0 40px -10px hsl(32 95% 44% / 0.3);
+    --shadow-glow-reflection: 0 0 40px -10px hsl(270 70% 60% / 0.3);
 
-    --sidebar-background: 222 47% 6%;
+    /* Sidebar: Charcoal navy #0F172A */
+    --sidebar-background: 222 47% 11%;
     --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 217 91% 60%;
-    --sidebar-primary-foreground: 222 47% 6%;
-    --sidebar-accent: 217 33% 17%;
+    --sidebar-primary: 217 91% 53%;
+    --sidebar-primary-foreground: 210 40% 98%;
+    --sidebar-accent: 222 47% 18%;
     --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 217 33% 17%;
-    --sidebar-ring: 217 91% 60%;
+    --sidebar-border: 222 47% 20%;
+    --sidebar-ring: 217 91% 53%;
   }
 }
 
